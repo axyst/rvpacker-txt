@@ -222,11 +222,6 @@ ENCODINGS = %w[
 # @param [String] input_string
 # @return [String]
 def convert_to_utf8(input_string)
-    ENCODINGS.each do |encoding|
-        return input_string.encode('UTF-8', encoding)
-    rescue Encoding::InvalidByteSequenceError, Encoding::UndefinedConversionError
-        next
-    end
-
-    raise EncodingError("Cannot convert string #{input_string} to UTF-8")
+  return input_string if input_string.encoding == Encoding::UTF_8
+  return input_string.force_encoding('GBK').encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
 end

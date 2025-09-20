@@ -420,7 +420,7 @@ end
 
 # @param [String] ini_file_path
 def self.read_ini_title(ini_file_path)
-    file_lines = File.readlines(ini_file_path, chomp: true)
+    file_lines = File.readlines(ini_file_path, chomp: true, encoding: 'GBK')
     file_lines.each do |line|
         if line.downcase.start_with?('title')
             parts = line.partition('=')
@@ -550,6 +550,7 @@ def self.read_system(system_file_path, ini_file_path, output_path, romanize, log
     # want is LAME
     # So just throw that ini ass and continue
     ini_game_title = read_ini_title(ini_file_path).strip
+    ini_game_title = convert_to_utf8(ini_game_title)
     ini_game_title = romanize_string(ini_game_title) if romanize
 
     if processing_mode == :append && !system_translation_map.include?(ini_game_title)
